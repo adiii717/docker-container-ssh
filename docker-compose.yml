@@ -1,0 +1,49 @@
+version: '3'
+networks:
+  my-ntwk:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+services:
+  f-app:
+    image: shh-test:latest
+    tty: true
+    container_name: f-app
+    hostname: f-app.info.my
+    ports:
+      - "22:22"
+    networks:
+      my-ntwk:
+        ipv4_address: 172.20.0.5
+    extra_hosts:
+      - "f-db.info.my:172.20.0.6"
+      - "p-app.info.my:172.20.0.7"
+      - "p-db.info.my:172.20.0.8"
+    depends_on:
+      - f-db
+      - p-app
+      - p-db
+  f-db:
+    image: shh-test:latest
+    tty: true
+    container_name: f-db
+    hostname: f-db.info.my
+    networks:
+      my-ntwk:
+        ipv4_address: 172.20.0.6
+  p-app:
+    image: shh-test:latest
+    tty: true
+    container_name: p-app
+    hostname: p-app.info.my
+    networks:
+      my-ntwk:
+        ipv4_address: 172.20.0.7
+  p-db:
+    image: shh-test:latest
+    tty: true
+    container_name: prod-db
+    hostname: p-db.info.my
+    networks:
+      my-ntwk:
+        ipv4_address: 172.20.0.8
