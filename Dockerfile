@@ -13,10 +13,13 @@ WORKDIR /home/ubuntu
 RUN mkdir -p /home/nf2/.ssh/ && \
     chmod 0700 /home/nf2/.ssh  && \
     touch /home/nf2/.ssh/authorized_keys && \
-    chmod 600 /home/nf2/.ssh/authorized_keys
+    chmod 600 /home/nf2/.ssh/authorized_keys && \
+    touch /home/nf2/.ssh/config && \
+    chmod 600 /home/nf2/.ssh/config
 
 COPY ssh-keys/ /keys/
 RUN cat /keys/ssh_test.pub >> /home/nf2/.ssh/authorized_keys
+RUN cat /keys/config >> /home/nf2/.ssh/config
 
 USER root
 ENTRYPOINT service ssh start && bash
